@@ -1,30 +1,21 @@
-import dgram from 'dgram'
+import net from 'net'
 
-const connect = (num: number, resolve: any, reject: any) => {
-    const client = dgram.createSocket('udp4')
-
+export const connectTCP = () => {
+    const client = new net.Socket({ allowHalfOpen: true, readable: true })
+    client.connect(50123, '193.104.203.194', function () {
+        console.log('Connected')
+    })
+    client.on('data', function (data: any) {
+        console.log('Received: ' + data)
+    })
     client.on('error', (err) => {
-        console.log(`UDP server error:\n${err.stack}`)
-        client.close()
-        reject()
+        console.log(err)
     })
-
-    client.on('message', (msg, rinfo) => {
-        console.log(
-            `UDP server got: ${msg} from ${rinfo.address}:${rinfo.port}`
-        )
+    client.on('timeout', () => {
+        console.log('timeout')
     })
-
-    client.on('connect', () => {
-        const address = client.address()
-        console.log(`UDP server listening ${address.address}:${address.port}`)
-        resolve(client)
+    client.on('close', function () {
+        console.log('Connection closed')
     })
-
-    client.bind(744, `10.0.0.${num}`)
+    return client
 }
-export const startUDPserver = new Promise<dgram.Socket>((resolve, reject) => {
-    for (let n = 1; n < 32; n++) {
-        connect(n, resolve, reject)
-    }
-})

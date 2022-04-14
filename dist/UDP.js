@@ -3,28 +3,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.startUDPserver = void 0;
-const dgram_1 = __importDefault(require("dgram"));
-const connect = (num, resolve, reject) => {
-    const client = dgram_1.default.createSocket('udp4');
+exports.connectTCP = void 0;
+const net_1 = __importDefault(require("net"));
+const connectTCP = () => {
+    const client = new net_1.default.Socket({ allowHalfOpen: true, readable: true });
+    client.connect(50123, '193.104.203.194', function () {
+        console.log('Connected');
+    });
+    client.on('data', function (data) {
+        console.log('Received: ' + data);
+    });
     client.on('error', (err) => {
-        console.log(`UDP server error:\n${err.stack}`);
-        client.close();
-        reject();
+        console.log(err);
     });
-    client.on('message', (msg, rinfo) => {
-        console.log(`UDP server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
+    client.on('timeout', () => {
+        console.log('timeout');
     });
-    client.on('connect', () => {
-        const address = client.address();
-        console.log(`UDP server listening ${address.address}:${address.port}`);
-        resolve(client);
+    client.on('close', function () {
+        console.log('Connection closed');
     });
-    client.bind(744, `10.0.0.${num}`);
+    return client;
 };
-exports.startUDPserver = new Promise((resolve, reject) => {
-    for (let n = 1; n < 32; n++) {
-        connect(n, resolve, reject);
-    }
-});
+exports.connectTCP = connectTCP;
 //# sourceMappingURL=UDP.js.map

@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import path from 'path'
-import { startUDPserver } from './UDP'
+import { connectTCP } from './UDP'
 
 dotenv.config()
 const PORT = process.env.PORT || 3000
@@ -17,7 +17,7 @@ const start = async (): Promise<void> => {
         app.listen(PORT, () => {
             console.log(`Data server started on port ${PORT}`)
         })
-        const udp = await startUDPserver
+        const tcp = connectTCP()
     } catch (error) {
         console.error(error.message)
         process.exit(1)
