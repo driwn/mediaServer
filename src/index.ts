@@ -17,7 +17,7 @@ const start = async (): Promise<void> => {
         app.listen(PORT, () => {
             console.log(`Data server started on port ${PORT}`)
         })
-        const udp = startUDPserver()
+        const udp = await startUDPserver
     } catch (error) {
         console.error(error.message)
         process.exit(1)
