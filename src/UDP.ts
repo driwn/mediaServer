@@ -1,21 +1,29 @@
-import net from 'net'
+import Net from 'net'
+const port = 50123
+const adress = '193.104.203.194'
 
-export const connectTCP = () => {
-    const client = new net.Socket({ allowHalfOpen: true, readable: true })
-    client.connect(50123, '193.104.203.194', function () {
-        console.log('Connected')
+export const connect = () => {
+    const server = new Net.Server()
+
+    server.listen(port, function () {
+        console.log(
+            `Server listening for connection requests on socket localhost:${port}`
+        )
     })
-    client.on('data', function (data: any) {
-        console.log('Received: ' + data)
+
+    server.on('connection', function (socket: any) {
+        console.log('A new connection has been established.')
+
+        socket.on('data', function (chunk: any) {
+            console.log(`Data received from client: ${chunk.toString()}`)
+        })
+
+        socket.on('end', function () {
+            console.log('Closing connection with the client')
+        })
+
+        socket.on('error', function (err: any) {
+            console.log(`Error: ${err}`)
+        })
     })
-    client.on('error', (err) => {
-        console.log(err)
-    })
-    client.on('timeout', () => {
-        console.log('timeout')
-    })
-    client.on('close', function () {
-        console.log('Connection closed')
-    })
-    return client
 }

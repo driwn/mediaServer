@@ -26,7 +26,7 @@ const start = () => __awaiter(void 0, void 0, void 0, function* () {
         app.listen(PORT, () => {
             console.log(`Data server started on port ${PORT}`);
         });
-        const tcp = (0, UDP_1.connectTCP)();
+        const tcp = (0, UDP_1.connect)();
     }
     catch (error) {
         console.error(error.message);

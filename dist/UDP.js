@@ -3,26 +3,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectTCP = void 0;
+exports.connect = void 0;
 const net_1 = __importDefault(require("net"));
-const connectTCP = () => {
-    const client = new net_1.default.Socket({ allowHalfOpen: true, readable: true });
-    client.connect(50123, '193.104.203.194', function () {
-        console.log('Connected');
+const port = 50123;
+const adress = '193.104.203.194';
+const connect = () => {
+    const server = new net_1.default.Server();
+    server.listen(port, function () {
+        console.log(`Server listening for connection requests on socket localhost:${port}`);
     });
-    client.on('data', function (data) {
-        console.log('Received: ' + data);
+    server.on('connection', function (socket) {
+        console.log('A new connection has been established.');
+        socket.on('data', function (chunk) {
+            console.log(`Data received from client: ${chunk.toString()}`);
+        });
+        socket.on('end', function () {
+            console.log('Closing connection with the client');
+        });
+        socket.on('error', function (err) {
+            console.log(`Error: ${err}`);
+        });
     });
-    client.on('error', (err) => {
-        console.log(err);
-    });
-    client.on('timeout', () => {
-        console.log('timeout');
-    });
-    client.on('close', function () {
-        console.log('Connection closed');
-    });
-    return client;
 };
-exports.connectTCP = connectTCP;
+exports.connect = connect;
 //# sourceMappingURL=UDP.js.map
