@@ -1,25 +1,25 @@
 import dgram from 'dgram'
 
 export const startUDPserver = () => {
-    const server = dgram.createSocket('udp4')
+    const client = dgram.createSocket('udp4')
 
-    server.on('error', (err) => {
+    client.on('error', (err) => {
         console.log(`UDP server error:\n${err.stack}`)
-        server.close()
+        client.close()
     })
 
-    server.on('message', (msg, rinfo) => {
+    client.on('message', (msg, rinfo) => {
         console.log(
             `UDP server got: ${msg} from ${rinfo.address}:${rinfo.port}`
         )
     })
 
-    server.on('listening', () => {
-        const address = server.address()
+    client.on('connect', () => {
+        const address = client.address()
         console.log(`UDP server listening ${address.address}:${address.port}`)
     })
 
-    server.bind(744)
+    client.bind(744, '10.0.0.1')
 
-    return server
+    return client
 }

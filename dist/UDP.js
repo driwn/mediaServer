@@ -6,20 +6,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.startUDPserver = void 0;
 const dgram_1 = __importDefault(require("dgram"));
 const startUDPserver = () => {
-    const server = dgram_1.default.createSocket('udp4');
-    server.on('error', (err) => {
+    const client = dgram_1.default.createSocket('udp4');
+    client.on('error', (err) => {
         console.log(`UDP server error:\n${err.stack}`);
-        server.close();
+        client.close();
     });
-    server.on('message', (msg, rinfo) => {
+    client.on('message', (msg, rinfo) => {
         console.log(`UDP server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
     });
-    server.on('listening', () => {
-        const address = server.address();
+    client.on('connect', () => {
+        const address = client.address();
         console.log(`UDP server listening ${address.address}:${address.port}`);
     });
-    server.bind(744);
-    return server;
+    client.bind(744, '10.0.0.1');
+    return client;
 };
 exports.startUDPserver = startUDPserver;
 //# sourceMappingURL=UDP.js.map
