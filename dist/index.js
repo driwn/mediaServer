@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const UDP_1 = require("./UDP");
 dotenv_1.default.config();
 const PORT = process.env.PORT || 3000;
 const app = (0, express_1.default)();
@@ -25,6 +26,7 @@ const start = () => __awaiter(void 0, void 0, void 0, function* () {
         app.listen(PORT, () => {
             console.log(`Data server started on port ${PORT}`);
         });
+        const udp = (0, UDP_1.startUDPserver)();
     }
     catch (error) {
         console.error(error.message);
