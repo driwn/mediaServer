@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "target": "es6",
+        "noImplicitAny": true,
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "outDir": "dist",
+        "baseUrl": ".",
+        "paths": {
+            "@type/*": ["src/types/*"],
+            "@utils/*": ["src/utils/*"],
+            "@models/*": ["src/mongo/Models/*"],
+            "@service/*": ["src/services/*"],
+            "@class/*": ["src/classes/*"],
+            "@routes/*": ["src/routes/*"]
+        }
+    },
+    "include": ["src/**/*"],
+    "exclude": ["./node_modules"]
+}
